@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+{% block title %}Make a Wish! 🎂{% endblock %}
+
+{% block content %}
+<!-- Full-Screen Confetti Burst Layer -->
+<div class="confetti-burst-layer" id="confettiLayer" aria-hidden="true"></div>
+
+<div class="cake-stage">
+    <div class="cake-scene" id="cakeScene">
+        <!-- Interactive Glazed Chocolate Cake -->
+        <div class="cake" id="birthdayCake" title="Tap to blow out the candle">
+            <div class="candle">
+                <div class="flame"></div>
+                <div class="smoke"></div>
+            </div>
+
+            <div class="toppings" aria-hidden="true">
+                <span class="truffle truffle-left"></span>
+                <span class="truffle truffle-right"></span>
+                <span class="gold-flake flake-1"></span>
+                <span class="gold-flake flake-2"></span>
+                <span class="gold-flake flake-3"></span>
+            </div>
+
+            <!-- Top Chocolate Tier with Animated Mirror Glaze -->
+            <div class="tier tier-top">
+                <div class="glaze-top-cap"></div>
+                <div class="candle-reflection" id="candleReflection"></div>
+                <div class="glaze-sheen"></div>
+
+                <svg class="ganache-drip drip-top" viewBox="0 0 164 48" preserveAspectRatio="none" aria-hidden="true">
+                    <defs>
+                        <linearGradient id="glazeGradTop" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#3b170b" />
+                            <stop offset="45%" stop-color="#1f0a04" />
+                            <stop offset="100%" stop-color="#120502" />
+                        </linearGradient>
+                    </defs>
+                    <path fill="url(#glazeGradTop)" d="M0,0 L164,0 L164,12
+               C164,22 156,25 153,25 C150,25 147,21 147,14
+               C145,10 142,10 140,11
+               C135,11 136,36 130,36 C124,36 124,13 118,13
+               C114,10 112,10 110,10
+               C105,10 106,27 100,27 C94,27 94,11 88,11
+               C84,9 82,9 80,9
+               C74,9 76,43 69,43 C62,43 63,12 56,12
+               C52,10 50,10 48,10
+               C42,10 44,24 38,24 C32,24 33,11 26,11
+               C22,10 21,10 19,10
+               C13,10 15,33 9,33 C3,33 3,15 0,13 Z" />
+                    <path class="drip-gloss" d="M128,22 Q127,29 129,33" />
+                    <path class="drip-gloss" d="M98,17 Q97,21 99,24" />
+                    <path class="drip-gloss" d="M67,23 Q66,33 68,39" />
+                    <path class="drip-gloss" d="M36,16 Q35,19 37,21" />
+                    <path class="drip-gloss" d="M7,19 Q6,25 8,30" />
+                </svg>
+            </div>
+
+            <!-- Bottom Chocolate Tier with Animated Mirror Glaze -->
+            <div class="tier tier-bottom">
+                <div class="glaze-top-cap"></div>
+                <div class="tier-shadow-band"></div>
+                <div class="glaze-sheen"></div>
+
+                <svg class="ganache-drip drip-bottom" viewBox="0 0 224 54" preserveAspectRatio="none"
+                    aria-hidden="true">
+                    <defs>
+                        <linearGradient id="glazeGradBottom" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#38150a" />
+                            <stop offset="50%" stop-color="#1c0903" />
+                            <stop offset="100%" stop-color="#0f0401" />
+                        </linearGradient>
+                    </defs>
+                    <path fill="url(#glazeGradBottom)" d="M0,0 L224,0 L224,13
+               C224,26 216,28 212,28 C208,28 206,14 200,14
+               C193,14 194,42 187,42 C180,42 181,13 174,13
+               C167,13 167,25 161,25 C155,25 155,11 148,11
+               C141,11 142,47 134,47 C126,47 127,13 119,13
+               C112,13 112,30 105,30 C98,30 98,12 91,12
+               C84,12 85,39 77,39 C69,39 70,12 62,12
+               C55,12 55,24 49,24 C43,24 43,11 36,11
+               C29,11 30,35 22,35 C14,35 15,13 8,13
+               C4,13 2,16 0,15 Z" />
+                    <path class="drip-gloss" d="M210,18 Q209,22 211,25" />
+                    <path class="drip-gloss" d="M185,24 Q184,33 186,38" />
+                    <path class="drip-gloss" d="M159,16 Q158,20 160,22" />
+                    <path class="drip-gloss" d="M132,25 Q131,36 133,43" />
+                    <path class="drip-gloss" d="M103,18 Q102,23 104,27" />
+                    <path class="drip-gloss" d="M75,22 Q74,30 76,35" />
+                    <path class="drip-gloss" d="M20,20 Q19,27 21,31" />
+                </svg>
+            </div>
+
+            <!-- Porcelain Serving Plate -->
+            <div class="plate"></div>
+        </div>
+
+        <!-- Wrapped Birthday Gifts (Pop In When Candle Is Blown Out) -->
+        <div class="gift-box gift-left" title="Tap gift!">
+            <div class="gift-bow"></div>
+            <div class="gift-lid"></div>
+            <div class="gift-body"></div>
+        </div>
+
+        <div class="gift-box gift-right-back" title="Tap gift!">
+            <div class="gift-bow"></div>
+            <div class="gift-lid"></div>
+            <div class="gift-body"></div>
+        </div>
+
+        <div class="gift-box gift-right-front" title="Tap gift!">
+            <div class="gift-bow"></div>
+            <div class="gift-lid"></div>
+            <div class="gift-body"></div>
+        </div>
+    </div>
+
+    <p class="cake-hint" id="cakeHint">Make a wish &amp; tap the chocolate cake to blow out the candle</p>
+    <a href="{{ url_for('note') }}" class="next-btn hidden" id="toNoteBtn"
+        data-checkpoint="Page 3: Blew Out Candle & Clicked 'Read Your Note'">Read Your Note 💌</a>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const cakeScene = document.getElementById("cakeScene");
+    const cake = document.getElementById("birthdayCake");
+    const cakeHint = document.getElementById("cakeHint");
+    const toNoteBtn = document.getElementById("toNoteBtn");
+    const confettiLayer = document.getElementById("confettiLayer");
+
+    const burstPalette = [
+        "#ffd166", // Gold
+        "#ff6b9d", // Rose Pink
+        "#4ecdc4", // Mint Teal
+        "#b388ff", // Lavender
+        "#70d6ff", // Sky Blue
+        "#fff3b0", // Champagne
+        "#ff9e00"  // Tangerine Gold
+    ];
+
+    function launchConfettiCannon(originX, originY, count = 65) {
+        for (let i = 0; i < count; i++) {
+            const piece = document.createElement("span");
+            piece.className = "confetti-piece";
+
+            const color = burstPalette[Math.floor(Math.random() * burstPalette.length)];
+            const isStreamer = Math.random() > 0.35;
+            const w = isStreamer ? (Math.random() * 5 + 6).toFixed(1) : (Math.random() * 4 + 5).toFixed(1);
+            const h = isStreamer ? (Math.random() * 8 + 10).toFixed(1) : w;
+
+            piece.style.left = originX + "px";
+            piece.style.top = originY + "px";
+            piece.style.width = w + "px";
+            piece.style.height = h + "px";
+            piece.style.backgroundColor = color;
+            piece.style.borderRadius = isStreamer ? "2px" : "50%";
+            piece.style.boxShadow = `0 0 8px ${color}`;
+
+            // Fan outward in an upward fountain arc, then drift down
+            const angle = -Math.PI / 2 + (Math.random() - 0.5) * 2.1;
+            const velocity = 140 + Math.random() * 260;
+            const peakX = Math.cos(angle) * velocity;
+            const peakY = Math.sin(angle) * velocity;
+            const endX = peakX + (Math.random() - 0.5) * 180;
+            const endY = window.innerHeight - originY + 120;
+
+            piece.style.setProperty("--px", peakX.toFixed(1) + "px");
+            piece.style.setProperty("--py", peakY.toFixed(1) + "px");
+            piece.style.setProperty("--ex", endX.toFixed(1) + "px");
+            piece.style.setProperty("--ey", endY.toFixed(1) + "px");
+            piece.style.setProperty("--rz", (Math.random() * 900 - 450).toFixed(0) + "deg");
+            piece.style.setProperty("--rx", (Math.random() * 720).toFixed(0) + "deg");
+            piece.style.animationDuration = (Math.random() * 1.4 + 2.2).toFixed(2) + "s";
+            piece.style.animationDelay = (Math.random() * 0.18).toFixed(2) + "s";
+
+            confettiLayer.appendChild(piece);
+            piece.addEventListener("animationend", () => piece.remove());
+        }
+    }
+
+    cake.addEventListener("click", () => {
+        if (!cake.classList.contains("blown-out")) {
+            cake.classList.add("blown-out");
+            cakeScene.classList.add("celebrating");
+            cakeHint.textContent = "Happy Birthday! Wish made! 🎉🎁";
+            toNoteBtn.classList.remove("hidden");
+
+            const rect = cake.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const topY = rect.top + rect.height * 0.28;
+
+            // Two celebratory confetti cannon waves
+            launchConfettiCannon(centerX, topY, 75);
+            setTimeout(() => launchConfettiCannon(centerX - 60, topY + 20, 40), 280);
+            setTimeout(() => launchConfettiCannon(centerX + 60, topY + 20, 40), 420);
+        }
+    });
+
+    // Clicking any revealed gift box pops extra confetti & wiggles the box
+    document.querySelectorAll(".gift-box").forEach((gift) => {
+        gift.addEventListener("click", (e) => {
+            e.stopPropagation();
+            gift.classList.remove("gift-wiggle");
+            void gift.offsetWidth;
+            gift.classList.add("gift-wiggle");
+
+            const rect = gift.getBoundingClientRect();
+            launchConfettiCannon(rect.left + rect.width / 2, rect.top, 26);
+        });
+    });
+</script>
+{% endblock %}

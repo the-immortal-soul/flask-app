@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Happy Birthday ✨{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    </head>
+
+<body>
+    <!-- Persistent Cursor-Responsive Glowing Confetti Background -->
+    <div class="love-bg" id="loveBg">
+        <div class="center-glow"></div>
+        <div class="cursor-glow" id="cursorGlow"></div>
+        <div class="parallax-layer" id="parallaxLayer"></div>
+    </div>
+
+    <!-- Continuous Background Music & Mute Toggle -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="{{ url_for('static', filename='audio/music.mp3') }}" type="audio/mpeg">
+    </audio>
+    <button type="button" class="music-toggle" id="musicToggle" aria-label="Toggle Background Music"
+        title="Toggle Music">🔇</button>
+
+    <!-- Stage Content Injected Here -->
+    <main class="stage-wrapper">
+        {% block content %}{% endblock %}
+    </main>
+
+    <script>
+        // 1. Glowing Birthday Confetti Dots
+        const loveBg = document.getElementById("loveBg");
+        const parallaxLayer = document.getElementById("parallaxLayer");
+        const cursorGlow = document.getElementById("cursorGlow");
+
+        const confettiColors = [
+            "#ffd166", // Warm Gold
+            "#ff6b9d", // Birthday Pink
+            "#4ecdc4", // Mint Aqua
+            "#b388ff", // Soft Lavender
+            "#70d6ff", // Sky Blue
+            "#fff3b0"  // Champagne Sparkle
+        ];
+
+        function createConfettiDot() {
+            const dot = document.createElement("span");
+            dot.className = "confetti-dot";
+
+            // Random position anywhere across the screen
+            dot.style.left = Math.random() * 100 + "%";
+            dot.style.top = Math.random() * 100 + "%";
+
+            // Mix crisp bright confetti dots with soft out-of-focus bokeh dots
+            const isBokeh = Math.random() > 0.65;
+            const size = isBokeh
+                ? (Math.random() * 10 + 9).toFixed(1)
+                : (Math.random() * 4.5 + 3).toFixed(1);
+
+            dot.style.width = size + "px";
+            dot.style.height = size + "px";
+            dot.style.filter = isBokeh
+                ? `blur(${(Math.random() * 2.5 + 1.5).toFixed(1)}px)`
+                : "none";
+
+            const color = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+            dot.style.backgroundColor = color;
+            dot.style.boxShadow = `0 0 ${isBokeh ? 16 : 8}px ${color}, 0 0 ${isBokeh ? 28 : 16}px ${color}`;
+            dot.style.setProperty("--max-op", (isBokeh ? Math.random() * 0.35 + 0.25 : Math.random() * 0.45 + 0.5).toFixed(2));
+
+            // Gentle upward & sideways confetti drift
+            const dx = (Math.random() - 0.5) * 90;
+            const dy = -(Math.random() * 110 + 40);
+            dot.style.setProperty("--dx", dx + "px");
+            dot.style.setProperty("--dy", dy + "px");
+            dot.style.animationDuration = (Math.random() * 4 + 5).toFixed(1) + "s";
+
+            parallaxLayer.appendChild(dot);
+
+            dot.addEventListener("animationend", () => {
+                dot.remove();
+                createConfettiDot();
+            });
+        }
+
+        // Populate 60 staggered glowing confetti dots
+        for (let i = 0; i < 60; i++) {
+            setTimeout(createConfettiDot, i * 110);
+        }
+
+        // 2. Cursor-Responsive Parallax, Spotlight & Glowing Confetti Trail
+        let targetX = 0, targetY = 0;
+        let currentX = 0, currentY = 0;
+        let pointerPxX = window.innerWidth / 2;
+        let pointerPxY = window.innerHeight / 2;
+        let lastTrailTime = 0;
+
+        function spawnCursorDot(x, y, isBurst = false) {
+            const spark = document.createElement("span");
+            spark.className = "cursor-dot";
+            spark.style.left = x + "px";
+            spark.style.top = y + "px";
+
+            const color = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+            const dotSize = (isBurst ? Math.random() * 5 + 4 : Math.random() * 3.5 + 3).toFixed(1) + "px";
+            spark.style.width = dotSize;
+            spark.style.height = dotSize;
+            spark.style.backgroundColor = color;
+            spark.style.boxShadow = `0 0 8px ${color}, 0 0 16px ${color}`;
+
+            const spreadX = (Math.random() - 0.5) * (isBurst ? 110 : 45);
+            const spreadY = isBurst
+                ? (Math.random() - 0.5) * 110
+                : -(Math.random() * 45 + 15);
+            spark.style.setProperty("--tx", spreadX + "px");
+            spark.style.setProperty("--ty", spreadY + "px");
+
+            loveBg.appendChild(spark);
+            spark.addEventListener("animationend", () => spark.remove());
+        }
+
+        // Keeps the cake blow-out burst compatible with glowing confetti dots
+        window.spawnCursorHeart = spawnCursorDot;
+
+        window.addEventListener("pointermove", (e) => {
+            pointerPxX = e.clientX;
+            pointerPxY = e.clientY;
+            targetX = (e.clientX / window.innerWidth - 0.5) * 2;
+            targetY = (e.clientY / window.innerHeight - 0.5) * 2;
+            cursorGlow.style.opacity = "1";
+
+            const now = Date.now();
+            if (now - lastTrailTime > 65) {
+                lastTrailTime = now;
+                spawnCursorDot(e.clientX, e.clientY, false);
+            }
+        }, { passive: true });
+
+        window.addEventListener("pointerdown", (e) => {
+            for (let i = 0; i < 8; i++) {
+                spawnCursorDot(e.clientX, e.clientY, true);
+            }
+        }, { passive: true });
+
+        function animateParallax() {
+            currentX += (targetX - currentX) * 0.07;
+            currentY += (targetY - currentY) * 0.07;
+
+            loveBg.style.setProperty("--px", currentX.toFixed(4));
+            loveBg.style.setProperty("--py", currentY.toFixed(4));
+            cursorGlow.style.transform = `translate3d(${pointerPxX}px, ${pointerPxY}px, 0) translate(-50%, -50%)`;
+
+            requestAnimationFrame(animateParallax);
+        }
+        animateParallax();
+
+        // 3. Continuous Audio Across Route Transitions
+        const bgMusic = document.getElementById("bgMusic");
+        const musicToggle = document.getElementById("musicToggle");
+
+        const savedTime = parseFloat(sessionStorage.getItem("musicTime") || "0");
+        const shouldPlay = sessionStorage.getItem("musicPlaying") === "true";
+
+        if (!isNaN(savedTime) && savedTime > 0) {
+            bgMusic.currentTime = savedTime;
+        }
+
+        function updateMusicIcon() {
+            musicToggle.textContent = bgMusic.paused ? "🔇" : "🔊";
+        }
+
+        if (shouldPlay) {
+            bgMusic.play().then(updateMusicIcon).catch(updateMusicIcon);
+        }
+
+        musicToggle.addEventListener("click", () => {
+            if (bgMusic.paused) {
+                bgMusic.play().then(() => {
+                    sessionStorage.setItem("musicPlaying", "true");
+                    updateMusicIcon();
+                }).catch(() => { });
+            } else {
+                bgMusic.pause();
+                sessionStorage.setItem("musicPlaying", "false");
+                updateMusicIcon();
+            }
+        });
+
+        window.addEventListener("pagehide", () => {
+            sessionStorage.setItem("musicTime", bgMusic.currentTime);
+            sessionStorage.setItem("musicPlaying", !bgMusic.paused);
+        });
+
+        // 4. Background Checkpoint Email Trigger
+        document.querySelectorAll("[data-checkpoint]").forEach((btn) => {
+            btn.addEventListener("click", () => {
+                const stageName = btn.getAttribute("data-checkpoint");
+                fetch("{{ url_for('checkpoint') }}", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ stage: stageName }),
+                    keepalive: true
+                }).catch(() => { });
+            });
+        });
+    </script>
+
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>

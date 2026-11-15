@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Loading Surprise... ♥{% endblock %}
+
+{% block content %}
+<div class="glass-card center-content">
+    <!-- Glowing Candle with Flickering Flame -->
+    <div class="loader-candle-wrap" aria-hidden="true">
+        <div class="loader-aura"></div>
+        <div class="loader-flame"></div>
+        <div class="loader-wick"></div>
+        <div class="loader-candle">
+            <div class="loader-drip"></div>
+        </div>
+        <div class="loader-holder"></div>
+    </div>
+
+    <p class="loading-text" id="loadingText">Preparing something special for my Maidam Jii🤭...</p>
+    <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <a href="{{ url_for('counter') }}" class="next-btn hidden" id="startBtn"
+        data-checkpoint="Page 1: Clicked 'Open Your Surprise'">Open Your Surprise</a>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const fill = document.getElementById("progressFill");
+    const text = document.getElementById("loadingText");
+    const startBtn = document.getElementById("startBtn");
+    let percent = 0;
+
+    const timer = setInterval(() => {
+        percent += 2;
+        fill.style.width = percent + "%";
+
+        if (percent >= 100) {
+            clearInterval(timer);
+            text.textContent = "Ready for my Maidam Jii🤭 ✨";
+            startBtn.classList.remove("hidden");
+        }
+    }, 55);
+
+    // Unlock audio playback on user click so it persists across pages
+    startBtn.addEventListener("click", () => {
+        sessionStorage.setItem("musicPlaying", "true");
+        bgMusic.play().catch(() => { });
+    });
+</script>
+{% endblock %}

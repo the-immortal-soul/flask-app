@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}Every Moment Since {{ birth_label }}{% endblock %}
+
+{% block content %}
+<div class="glass-card center-content">
+    <h2 class="stage-heading">Celebrating You Since {{ birth_label }}</h2>
+
+    <div class="digital-counter" aria-label="Time elapsed since {{ birth_label }}">
+        <div class="unit-col">
+            <span id="years">00</span>
+            <small>Years</small>
+        </div>
+        <span class="colon">:</span>
+        <div class="unit-col">
+            <span id="months">00</span>
+            <small>Months</small>
+        </div>
+        <span class="colon">:</span>
+        <div class="unit-col">
+            <span id="days">00</span>
+            <small>Days</small>
+        </div>
+        <span class="colon">:</span>
+        <div class="unit-col">
+            <span id="hours">00</span>
+            <small>Hrs</small>
+        </div>
+        <span class="colon">:</span>
+        <div class="unit-col">
+            <span id="minutes">00</span>
+            <small>Mins</small>
+        </div>
+        <span class="colon">:</span>
+        <div class="unit-col">
+            <span id="seconds">00</span>
+            <small>Secs</small>
+        </div>
+    </div>
+
+    <a href="{{ url_for('cake') }}" class="next-btn"
+        data-checkpoint="Page 2: Viewed Counter & Clicked 'Time for Cake'">Time for Cake 🎂</a>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const birthDate = new Date("{{ birth_iso }}");
+
+    function updateLiveCounter() {
+        const now = new Date();
+
+        let years = now.getFullYear() - birthDate.getFullYear();
+        let months = now.getMonth() - birthDate.getMonth();
+        let days = now.getDate() - birthDate.getDate();
+        let hours = now.getHours() - birthDate.getHours();
+        let minutes = now.getMinutes() - birthDate.getMinutes();
+        let seconds = now.getSeconds() - birthDate.getSeconds();
+
+        if (seconds < 0) {
+            seconds += 60;
+            minutes--;
+        }
+        if (minutes < 0) {
+            minutes += 60;
+            hours--;
+        }
+        if (hours < 0) {
+            hours += 24;
+            days--;
+        }
+        if (days < 0) {
+            const prevMonthDays = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+            days += prevMonthDays;
+            months--;
+        }
+        if (months < 0) {
+            months += 12;
+            years--;
+        }
+
+        document.getElementById("years").textContent = String(years).padStart(2, "0");
+        document.getElementById("months").textContent = String(months).padStart(2, "0");
+        document.getElementById("days").textContent = String(days).padStart(2, "0");
+        document.getElementById("hours").textContent = String(hours).padStart(2, "0");
+        document.getElementById("minutes").textContent = String(minutes).padStart(2, "0");
+        document.getElementById("seconds").textContent = String(seconds).padStart(2, "0");
+    }
+
+    updateLiveCounter();
+    setInterval(updateLiveCounter, 1000);
+</script>
+{% endblock %}

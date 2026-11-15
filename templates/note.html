@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}{{ heading }}{% endblock %}
+
+{% block content %}
+<div class="glass-card note-card">
+    <h1 class="note-title">{{ heading }}</h1>
+    <p class="note-body">{{ paragraph }}</p>
+    <a href="{{ youtube_url }}" target="_blank" rel="noopener noreferrer" class="next-btn" id="youtubeBtn"
+        data-checkpoint="Page 4: Viewed Note & Clicked YouTube Video Button">Play Special Birthday Song 🎬</a>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Pause background music automatically so it doesn't clash with the YouTube video
+    document.getElementById("youtubeBtn").addEventListener("click", () => {
+        if (typeof bgMusic !== "undefined" && !bgMusic.paused) {
+            bgMusic.pause();
+            sessionStorage.setItem("musicPlaying", "false");
+            if (typeof updateMusicIcon === "function") {
+                updateMusicIcon();
+            }
+        }
+    });
+</script>
+{% endblock %}
